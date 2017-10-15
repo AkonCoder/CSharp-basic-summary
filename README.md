@@ -83,5 +83,159 @@ a=b-a;求出ab两点的距离，并将结果保存在a中；b=b-a;求出a到原�
 5             a = a ^ b;//a=10110,b=10100,两者相异或的结果是00010，保存在a中，换成十进制是2
 
 
+---
+C#基础总结（二）
+
+标签（空格分隔）： C#基础 继承的好处 构造函数
+
+---
+##### 继承的好处：
+*代码重用*
+*多态*
+
+#####  构造函数
+> 构造函数并不能继承，子类继承父类的时候，先调用父类的无参构造函数，如果父类没有无参构造函数，则会报错。反之如果要调用父类的构造函数，必须通过base关键字进行调用。
+
+##### 使用this调用构造函数
+（1）使用this调用本类的构造函数
+（2）使用this、base调用类中的成员变量
+
+
+##### 访问级别约束
+（1）子类必须比父类的访问级别低
+
+##### 多态的实现方式
+（1）虚方法
+（2）父类方法声明virtual，子类可以重写该方法。
+（3）使用new关键字隐藏父类的方法，在使用sdk或者dll时，更新了基类的sdk代码，方法与子类中的方法重名了，可以使用new关键字隐藏父类的方法。
+
+##### 静态成员、静态类
+（1）静态类中的成员必须是静态成员。
+（2）静态成员并不一定在静态类中。
+（3）静态成员属于类的，不属于具体的对象。所以访问静态成员时，不能通过对象名来访问，只能通过类名来访问。
+（4）工具类使用静态类
+
+##### 静态构造函数的特点
+（1）不能添加访问修饰符，默认为private
+（2）静态构造函数无参数
+（3）静态成员初次调用的时候，静态构造函数才被第一次调用
+（4）静态构造函数只执行一次
+ (5) 静态构造函数先执行，然后进行实例构造函数的执行。
+ 
+ C#高效编程里说到,这样一段话:
+创建某个类型的第一个实例时,所进行的操作顺序为:
+1.静态变量设置为0
+2.执行静态变量初始化器
+3.执行基类的静态构造函数
+4.执行静态构造函数
+5.实例变量设置为0
+6.执行衯变量初始化器
+7.执行基类中合适的实例构造函数
+8.执行实例构造函数
+
+
+##### 类型转换
+（1）强制转换 
+（2）as 转换（转换失败不报异常，返回null，转换成功返回对象）
+
+
+##### 实现多态的方式
+（1）virtual方法
+（2）abstract方法
+（3）接口
+
+##### 抽象方法与虚方法的不同
+
+抽象
+1.虚方法（virtual)有方法体，抽象方法(abstract)没有方法体【类似接口】
+
+virtual void SayWord()
+{
+//代码
+}
+abstract void SayWord();
+ 2.虚方法（virtual)在派生类中可以不重写，抽象方法(abstract)派生类中必须重写【类似接口】
+复制代码
+abstract class Person
+{
+     abstract void SayName();
+}
+class Man:Person
+{
+     override void SayName()
+     {
+       //方法实体
+      }
+}
+复制代码
+ 3.抽象方法(abstract)必须声明在抽象类中
+
+
+下面给出实例代码：
+复制代码
+ class Program
+    {
+        static void Main(string[] args)
+        {
+            Cat cat = new Cat("小花","2");
+            cat.Eat();
+            //调用父类中的虚方法，如果派生类中重写则调用重写后的
+            cat.ShowName();
+            Console.ReadKey();
+　　　　　　　//最后输出结果是:
+　　　　　　　　猫吃东西
+　　　　　　　　我的名字是小花，今年2岁了　
+        }
+    }
+
+    public abstract class Animal
+    {
+        protected string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        protected string age;
+
+        public string Age
+        {
+            get { return age; }
+            set { age = value; }
+        }
+        
+        /// <summary>
+        /// 虚方法
+        /// </summary>
+        public virtual void ShowName()
+        {
+            Console.WriteLine("我的名字是{0}，今年{1}岁了", this.name,this.age);
+        }
+        /// <summary>
+        /// 抽象方法
+        /// </summary>
+        public abstract void Eat();
+
+
+    }
+
+    public class Cat : Animal
+    {
+        /// <summary>
+        /// 派生类必须重写父类中的抽象方法，否则会报错
+        /// </summary>
+        public override void Eat()
+        {
+            Console.WriteLine("猫吃东西");
+        }
+
+        public Cat(string name, string age)
+        {
+            this.name = name;
+            this.age = age;
+        }
+    }
+
    
 
